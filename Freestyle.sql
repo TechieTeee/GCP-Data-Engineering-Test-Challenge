@@ -39,3 +39,23 @@ WITH
     *
   FROM
     taxitrips
+
+
+#RMSECheckAccuracy
+#standardSQL
+SELECT
+  SQRT(mean_squared_error) AS rmse
+FROM
+  ML.EVALUATE(MODEL `taxirides.fare_model_767`,
+    (
+    WITH
+      taxitrips AS (
+      SELECT
+        *,
+        ST_Distance(ST_GeogPoint(pickuplon, pickuplat), ST_GeogPoint(dropofflon, dropofflat)) AS euclidean
+      FROM
+        `taxirides.taxi_training_data_985` )
+      SELECT
+        *
+      FROM
+        taxitrips ))
