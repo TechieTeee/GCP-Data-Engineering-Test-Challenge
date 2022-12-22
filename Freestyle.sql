@@ -1,3 +1,4 @@
+#CleanandPruneData
 Select
   pickup_datetime,
   pickup_longitude AS pickuplon,
@@ -21,3 +22,20 @@ WHERE
   AND dropoff_latitude < 42
   AND passenger_count > 1
   AND RAND() < 999999 / 1031673361
+
+
+#CreateModel
+CREATE or REPLACE MODEL
+  taxirides.fare_model_767 OPTIONS (model_type='linear_reg',
+    labels=['fare_amount_478']) AS
+WITH
+  taxitrips AS (
+  SELECT
+    *,
+    ST_Distance(ST_GeogPoint(pickuplon, pickuplat), ST_GeogPoint(dropofflon, dropofflat)) AS euclidean
+  FROM
+    `taxirides.taxi_training_data_985` )
+  SELECT
+    *
+  FROM
+    taxitrips
