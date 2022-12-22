@@ -59,3 +59,22 @@ FROM
         *
       FROM
         taxitrips ))
+
+#BatchQuery
+#standardSQL
+SELECT
+  *
+FROM
+  ML.PREDICT(MODEL `taxirides.fare_model_767`,
+    (
+    WITH
+      taxitrips AS (
+      SELECT
+        *,
+        ST_Distance(ST_GeogPoint(pickuplon, pickuplat)   , ST_GeogPoint(dropofflon, dropofflat)) AS    euclidean
+      FROM
+        `taxirides.report_prediction_data` )
+    SELECT
+      *
+    FROM
+      taxitrips ))
